@@ -147,15 +147,16 @@ class PZArtboard extends PZLayer
         //this._exportOverlayLayers()
         this._pushIntoStoryData(this.index)
     }
-    
+
     //------------------- FIND HOTSPOTS WHICH LOCATE OVER FIXED HOTPOSTS ----------------------------
     //------------------- AND MOVE THEM INTO FIXED LAYER SPECIAL HOTSPOTS ---------------------------
     _findFixedPanelHotspots()
     {
-        function isChild(parent,child){
-            if(!child.parent) return false
-            if(child.parent==parent) return true
-            return isChild(parent,child.parent)
+        function isChild(parent, child)
+        {
+            if (!child.parent) return false
+            if (child.parent == parent) return true
+            return isChild(parent, child.parent)
         }
         for (var l of this.fixedLayers)
         {
@@ -165,11 +166,13 @@ class PZArtboard extends PZLayer
                 let hotspot = this.hotspots[hIndex]
                 let frame = l.frame
 
-                if(l.isVertScroll){
-                    if(!isChild(l,hotspot.owner)) continue
+                if (l.isVertScroll)
+                {
+                    if (!isChild(l, hotspot.owner)) continue
                     //const maskedLayer = l.isVertScroll ? l.findMaskLayer():null 
                     //frame = maskedLayer ? maskedLayer.frame : l.frame
-                }else{
+                } else
+                {
 
                 }
                 if (hotspot.r.insideRectangle(frame))
@@ -299,7 +302,7 @@ class PZArtboard extends PZLayer
     {
         if (!this.shadowLayers) return undefined
         // sort layers to find largest
-        const resorted = this.shadowLayers.sort((l1,l2)=>l1.frame.height<l2.frame.height)
+        const resorted = this.shadowLayers.sort((l1, l2) => l1.frame.height < l2.frame.height)
         //
         return resorted[0].getShadowInfo()
     }
@@ -313,7 +316,7 @@ class PZArtboard extends PZLayer
         {
             if (checkKeepFixedShadow && l.keepFixedShadow) continue
             shadowInfo = l.getShadowInfo()
-            if (shadowInfo && shadowInfo.style.fills!==undefined && shadowInfo.style.fills.length)
+            if (shadowInfo && shadowInfo.style.fills !== undefined && shadowInfo.style.fills.length)
             {
                 break
             }
@@ -332,8 +335,9 @@ class PZArtboard extends PZLayer
     }
 
 
-    addShadowLayer(layer){
-        if(this.shadowLayers===undefined) this.shadowLayers = []
+    addShadowLayer(layer)
+    {
+        if (this.shadowLayers === undefined) this.shadowLayers = []
         this.shadowLayers.push(layer)
     }
 
@@ -497,7 +501,7 @@ class PZArtboard extends PZLayer
 
         if ('artboard' == exportType || 'layer' == exportType)
         {
-            scales = exporter.retinaImages ? [1,2] : [1]
+            scales = exporter.retinaImages ? [1, 2] : [1]
         } else if ('full' == exportType)
         {
             scales = [2]
@@ -521,8 +525,10 @@ class PZArtboard extends PZLayer
             slice.saveForWeb = false;
             slice.format = exporter.fileType;
 
-            const bounds = nlayer.absoluteRect();
-            if (forFixedLayer) slice.setRect(bounds.rect())
+            const slayer = Sketch.fromNative(nlayer)
+            let relative = slayer.frame
+            let absolute = relative.changeBasis({ from: slayer.parent })
+            if (forFixedLayer) slice.setRect(absolute)
 
             exporter.ndoc.saveArtboardOrSlice_toFile(slice, imagePath);
         }
@@ -549,7 +555,7 @@ class PZArtboard extends PZLayer
 
     _exportImages()
     {
-        if(this.artboardType===Constants.ARTBOARD_TYPE_EXTERNAL_URL) return
+        if (this.artboardType === Constants.ARTBOARD_TYPE_EXTERNAL_URL) return
         //this._getAllLayersMatchingPredicate(Sketch.getSelectedDocument().sketchObject)
 
         if (DEBUG) exporter.logMsg("PZArtboard._exportImages: running... " + this.name)
@@ -574,7 +580,7 @@ class PZArtboard extends PZLayer
         // ! temporary disabled because an exported image still shows hidden layers
         this._hideFixedLayers(false)
 
-        if (exporter.exportFullImages &&  (this.artboardType===Constants.ARTBOARD_TYPE_REGULAR || this.artboardType===Constants.ARTBOARD_TYPE_OVERLAY))
+        if (exporter.exportFullImages && (this.artboardType === Constants.ARTBOARD_TYPE_REGULAR || this.artboardType === Constants.ARTBOARD_TYPE_OVERLAY))
         {
             // export full image        
             if (DEBUG) exporter.logMsg("PZArtboard._exportImages: export full image")

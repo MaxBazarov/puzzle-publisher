@@ -228,7 +228,10 @@ class PZLayer
         this.hotspots = []
 
         //////////////////////////////////////////////////////// RECALCULTE COORDS FROM ABS TO LOCAL
-        this.frame = Utils.copyRectToRectangle(this.nlayer.absoluteRect())
+        let relative = sLayer.frame
+        let absolute = relative.changeBasis({ from: sLayer.parent })
+        this.frame = Utils.copyRectToRectangle(absolute)
+        console.log(absolute.y)
         if (!this.isArtboard)
         {
             this.frame.x -= this.artboard.frame.x
@@ -453,7 +456,7 @@ class PZLayer
             target: null,
             overlayRedirect: this.overlayRedirect,
             ancestorFixed: null,
-            owner:this
+            owner: this
         }
         let p = this
         while (!p.isArtboard)
