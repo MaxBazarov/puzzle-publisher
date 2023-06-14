@@ -31,12 +31,14 @@ Rectangle.prototype.copyToRect = function ()
 
 class Utils
 {
-    static getUserID(){
+    static getUserID()
+    {
         let userID = Utils.getPluginSetting(SettingKeys.PLUGIN_USER_ID)
-        if(userID===""){
-            userID = NSUUID.UUID().UUIDString().substr(0,8)
+        if (userID === "")
+        {
+            userID = NSUUID.UUID().UUIDString().substr(0, 8)
             const Settings = require('sketch/settings')
-            Settings.setSettingForKey(SettingKeys.PLUGIN_USER_ID,userID)
+            Settings.setSettingForKey(SettingKeys.PLUGIN_USER_ID, userID)
         }
         return userID
     }
@@ -239,7 +241,7 @@ class Utils
     // rect: GRect instnct
     static copyRectToRectangle(rect)
     {
-        return new Rectangle(rect.x(), rect.y(), rect.width(), rect.height())
+        return new Rectangle(rect.x, rect.y, rect.width, rect.height)
     }
 
     // rect: Rectangle instance
